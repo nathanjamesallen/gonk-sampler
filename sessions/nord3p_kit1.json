@@ -1,0 +1,18 @@
+{
+  "name": "Nord3P Kit1",
+  "midi_channel": 10,
+  "bpm": 80,
+  "bars_per_hit": 1,
+  "gap_bars": 2,
+  "velocities": [20, 45, 70, 95, 115, 127],
+  "round_robins": 4,
+  "passes": ["clean", "low", "med", "high", "bonkers"],
+  "sounds": [
+    {"name": "kick",  "note": 60, "role": "kick"},
+    {"name": "snare", "note": 62, "role": "snare"},
+    {"name": "tom lo", "note": 64, "role": "tom"},
+    {"name": "tom hi", "note": 65, "role": "tom"},
+    {"name": "hat",   "note": 67, "role": "hat"},
+    {"name": "perc",  "note": 69, "role": "perc"}
+  ]
+}

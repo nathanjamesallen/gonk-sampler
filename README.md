@@ -23,19 +23,34 @@ Check `gonk_out/_work/<take>/contact.png` before shipping a pack.
 | `pipeline/gonk_build.py` | loudness matching, `.dspreset` (RR modes, deep edit page, drive/crush buses), art, packaging |
 | `pipeline/contact_sheet.py` | spectrogram sheet of every pad's RR hits |
 | `pipeline/mock_ui.py` | rough preview render of the preset UI (Decent Sampler itself is the real test) |
-| `session/` | Nord Drum 3P sampling-session MIDI clip + hit map |
+| `capture/` | assembly line: `session.py` (spec → MIDI + map), `capture.py` (align + cut + QA), `build_layered.py` (instrument), `run.py` (one command) |
+| `sessions/` | session specs (`nord3p_kit1.json`) and generated clips/maps |
+| `tests/` | `simulate_session.py` — fake a recorded session to test without hardware |
 
-## Sampling session (Nord Drum 3P)
+## Capture assembly line (velocity layers × drive passes)
 
-`session/Nord3P_Session_80bpm.mid` — set Ableton to **80 BPM** (1 bar = 3 s, one hit per bar).
-MIDI channel 10 (Nord global default), notes 60/62/64/65/67/69 (channels 1–6),
-6 velocities (20/45/70/95/115/127) × 4 hits per channel, 2 empty bars between channels. 8:00 per pass.
+Three steps, any hardware:
 
-- Bar 1 is a sync hit — always start passes from bar 1 and keep it in the recording.
-- Re-trigger the clip once per drive setting. Split the Nord output on the first pass to get Clean + Low together.
-- Name files `KIT1_clean.wav`, `KIT1_low.wav`, `KIT1_med.wav`, `KIT1_high.wav`, `KIT1_bonkers.wav`.
+1. **Describe the session** — `sessions/<kit>.json`: sounds (name, MIDI note, role), velocities, round robins, spacing, passes.
+   `python3 capture/session.py sessions/nord3p_kit1.json sessions/out` → `.mid` clip + `_map.json`.
+2. **Record** — set the DAW tempo it prints (80 BPM = 3 s per hit), play the clip from bar 1, once per drive setting.
+   Turn the Gonkulator up between passes. Export each pass as `<Name>_<pass>.wav` (e.g. `Nord3P_Kit1_bonkers.wav`), same sample rate, starting at bar 1.
+3. **Build** — `python3 capture/run.py sessions/out/Nord3P_Kit1_map.json ~/Rec/Nord3P_Kit1_*.wav --name "Gonk Nord Kit 1"`
 
-Regenerate with different settings: edit the constants at the top of `session/make_session_midi.py`.
+What the capture step does: finds the bar-1 sync hit, fits latency + clock drift, re-finds every hit in a tight window,
+cuts it to just before the next one, trims the dead tail, and prints a QA report (missing triggers, clipping,
+velocity layers that don't get louder, round robins that don't match). It refuses to build with missing hits unless `--force`.
+
+What you get: one pad per sound from C1, every pad with all velocity layers and round robins, a **GONK** menu that
+switches passes (loudness-matched, so it changes character, not volume), PITCH / TONE / CRUSH / SPACE / VELOCITY / LEVEL,
+DEEP EDIT per pad, plus a one-shot zip organised Pass/Sound.
+
+Nord Drum 3P setup: global MIDI channel 10, individual channels off, notes 60/62/64/65/67/69 for channels 1–6.
+Split the Nord output on the first pass to capture Clean + Low together.
+
+Tested end-to-end on a simulated session (`tests/simulate_session.py`: real Nord hits, velocity-dependent tone,
+5 drive passes, 12 ms latency, 20 ppm drift, MIDI jitter, one dropped trigger): 719/719 present hits found, max onset
+error 1.25 ms, dropped hit flagged, 0.06 dB max level difference between GONK passes.
 
 ## Decent Sampler notes learned the hard way
 
@@ -46,7 +61,9 @@ Regenerate with different settings: edit the constants at the top of `session/ma
 
 ## Roadmap
 
-- [ ] MIDI-map slicing mode (use `session/*_map.json` instead of onset detection)
-- [ ] Velocity layers (loVel/hiVel per layer, RR within each layer)
-- [ ] Drive selector: Clean / Low / Med / High / Bonkers (group sets switched by menu, loudness-matched)
+- [x] MIDI-map capture (sync hit + drift fit)
+- [x] Velocity layers with RR inside each layer
+- [x] GONK drive selector, loudness-matched across passes
+- [ ] Combine several kits (Kit1+Kit2+Kit3) into one instrument
+- [ ] Verify in Decent Sampler with a real recorded session
 - [ ] Chromatic preset for tonal hits
