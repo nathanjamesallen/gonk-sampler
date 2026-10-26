@@ -1,0 +1,12 @@
+# audio + build output stay out of git (attach libraries to GitHub Releases instead)
+*.wav
+*.aif
+*.aiff
+*.flac
+*.dslibrary
+*.zip
+gonk_out/
+_work/
+dist/
+__pycache__/
+.DS_Store
