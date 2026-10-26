@@ -40,6 +40,7 @@ Regenerate with different settings: edit the constants at the top of `session/ma
 ## Decent Sampler notes learned the hard way
 
 - The background image is stretched behind DS's own header bar — never put layout in it. All boxes/labels are `<rectangle>`/`<label>` elements.
+- DS scales the panel to the window WIDTH and the keyboard covers whatever does not fit, so keep the panel wide and short (812x256).
 - On load DS fires every control's bindings in file order; the DEEP button must come after the pad menu.
 - Wave shaper isn't transparent at minimum, so DRIVE and CRUSH are parallel buses (dry signal untouched).
 
