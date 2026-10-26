@@ -134,19 +134,19 @@ def build_preset(pads, kit_name, sample_dir_rel, bg_rel, cover_rel, rr_counts):
     def rect(x, y, w, h, fill, border="00000000", bt=0, extra=""):
         L.append(f'      <rectangle x="{x}" y="{y}" width="{w}" height="{h}" fillColor="{fill}" '
                  f'borderColor="{border}" borderThickness="{bt}"{extra}/>')
-    rect(0, 0, 812, 48, "FF0E0F11")
-    rect(0, 48, 812, 2, "FFE8553D")
-    rect(452, 60, 344, 300, "FF1B1C1F", "FF303136", 1)
+    rect(0, 0, 812, 40, "FF0E0F11")
+    rect(0, 40, 812, 2, "FFE8553D")
+    rect(452, 46, 344, 260, "FF1B1C1F", "FF303136", 1)
     for p in pads:
         x, y, w, h = p["cell"]
         c = "FF" + ROLE_COLOR.get(p["role"], "#888888")[1:]
         rect(x, y, w, h, "FF202125", "FF303136", 1)
         rect(x, y, 4, h, c)
-    L.append(f'      <label x="18" y="3" width="330" height="30" text={qa(kit_name.upper())} '
-             f'textColor="FFF0ECE4" textSize="22" hAlign="left"/>')
-    L.append(f'      <label x="18" y="32" width="330" height="13" text={qa(rr_counts or "")} '
+    L.append(f'      <label x="18" y="2" width="330" height="24" text={qa(kit_name.upper())} '
+             f'textColor="FFF0ECE4" textSize="19" hAlign="left"/>')
+    L.append(f'      <label x="18" y="25" width="330" height="13" text={qa(rr_counts or "")} '
              f'textColor="FF8A8B90" textSize="10" hAlign="left"/>')
-    L.append('      <label x="470" y="12" width="82" height="24" text="ROUND ROBIN" '
+    L.append('      <label x="470" y="8" width="82" height="24" text="ROUND ROBIN" '
              'textColor="FF8A8B90" textSize="10" hAlign="right"/>')
 
     # ---- pad map labels (always visible)
@@ -172,7 +172,7 @@ def build_preset(pads, kit_name, sample_dir_rel, bg_rel, cover_rel, rr_counts):
              f'translation="fixed_value" translationValue="{"true" if e else "false"}"/>'
              for t, e in zip(("rr_rand", "rr_cycle", "rr_off"), en)]
         return f'        <option name="{name}">\n' + "\n".join("          " + x for x in b) + "\n        </option>"
-    L.append('      <menu x="556" y="12" width="120" height="24" value="1" textSize="13" '
+    L.append('      <menu x="556" y="8" width="120" height="24" value="1" textSize="13" '
              'textColor="FFE6E1D8" backgroundColor="FF232428" highlightedBackgroundColor="FFE8553D" '
              'tooltip="Random: never the same hit twice in a row. Cycle: steps 1-2-3-4. Off: always the first hit.">')
     L.append(rr_opt("Random", (1, 0, 0)))
@@ -182,7 +182,7 @@ def build_preset(pads, kit_name, sample_dir_rel, bg_rel, cover_rel, rr_counts):
 
 
     # ---- front panel: six knobs, Sitala-style (few controls, each musical)
-    cols, rows = [466, 578, 690], [76, 212]
+    cols, rows = [466, 578, 690], [56, 184]
     tone_lp = ('<binding type="effect" level="instrument" effectTags="tone_lp" parameter="FX_FILTER_FREQUENCY" '
                'translation="table" translationTable="0,180;0.15,600;0.3,2200;0.45,9000;0.5,22000;1,22000"/>')
     tone_hp = ('<binding type="effect" level="instrument" effectTags="tone_hp" parameter="FX_FILTER_FREQUENCY" '
@@ -213,11 +213,11 @@ def build_preset(pads, kit_name, sample_dir_rel, bg_rel, cover_rel, rr_counts):
     L += ["      " + k for k in main]
 
     # ---- DEEP page (hidden until the button is pressed)
-    L.append('      <rectangle x="452" y="60" width="344" height="300" fillColor="FF1E1F23" '
+    L.append('      <rectangle x="452" y="46" width="344" height="260" fillColor="FF1E1F23" '
              'borderColor="FFE8553D" borderThickness="1" tags="deep" visible="false"/>')
-    L.append('      <label x="466" y="70" width="200" height="18" text="DEEP EDIT · PAD" textColor="FFE8553D" '
+    L.append('      <label x="466" y="54" width="200" height="18" text="DEEP EDIT · PAD" textColor="FFE8553D" '
              'textSize="12" hAlign="left" tags="deep" visible="false"/>')
-    L.append('      <menu x="466" y="92" width="210" height="26" value="1" textSize="13" tags="deep,padmenu" '
+    L.append('      <menu x="466" y="74" width="210" height="26" value="1" textSize="13" tags="deep,padmenu" '
              'visible="false" textColor="FFE6E1D8" backgroundColor="FF232428" '
              'highlightedBackgroundColor="FFE8553D">')
     for p in pads:
@@ -228,11 +228,11 @@ def build_preset(pads, kit_name, sample_dir_rel, bg_rel, cover_rel, rr_counts):
                  f'translation="fixed_value" translationValue="true" triggerOnLoad="false"/>')
         L.append('        </option>')
     L.append('      </menu>')
-    L.append("      " + knob(694, 70, "VELOCITY", 0, 1, 0.6,
+    L.append("      " + knob(694, 52, "VELOCITY", 0, 1, 0.6,
              ['<binding type="amp" level="instrument" position="0" parameter="AMP_VEL_TRACK"/>'],
              tags="deep", w=90, h=96, visible=False,
              tip="0 = every hit full level. 1 = fully velocity sensitive. Whole kit."))
-    L.append('      <label x="466" y="128" width="210" height="44" textColor="FF8A8B90" textSize="11" '
+    L.append('      <label x="466" y="106" width="210" height="40" textColor="FF8A8B90" textSize="11" '
              'hAlign="left" vAlign="top" tags="deep" visible="false" '
              'text="Pick a pad, shape it below. Saves with your project."/>')
     px = [460, 544, 628, 712]
@@ -240,24 +240,24 @@ def build_preset(pads, kit_name, sample_dir_rel, bg_rel, cover_rel, rr_counts):
         t = f'pk{p["pad"]:02d}'
         tg = f'groupTags="{t}"'
         L += ["      " + k for k in [
-            knob(px[0], 200, "TUNE", -24, 24, 0,
+            knob(px[0], 184, "TUNE", -24, 24, 0,
                  [f'<binding type="amp" level="group" {tg} parameter="GROUP_TUNING"/>'],
                  tags=f"pk,{t}", pname=f"{note_name(p['note'])} {p['name']} ", w=84, h=100, visible=False, snap="whole_numbers",
                  tip="Semitones. Hold Shift for fine tuning", dflt=0),
-            knob(px[1], 200, "LENGTH", 0, 1, 1,
+            knob(px[1], 184, "LENGTH", 0, 1, 1,
                  [f'<binding type="amp" level="group" {tg} parameter="ENV_DECAY" translation="table" translationTable="{LENGTH_TABLE}"/>',
                   f'<binding type="amp" level="group" {tg} parameter="ENV_RELEASE" translation="table" translationTable="{LENGTH_TABLE}"/>'],
                  tags=f"pk,{t}", pname=f"{note_name(p['note'])} {p['name']} ", w=84, h=100, visible=False, tip="Full right = the whole hit. Turn left to choke it shorter."),
-            knob(px[2], 200, "LEVEL", 0, 1, 0.5,
+            knob(px[2], 184, "LEVEL", 0, 1, 0.5,
                  [f'<binding type="amp" level="group" {tg} parameter="AMP_VOLUME" translation="table" translationTable="0,0;0.5,1;1,2.5"/>'],
                  tags=f"pk,{t}", pname=f"{note_name(p['note'])} {p['name']} ", w=84, h=100, visible=False, tip="Centre = as balanced. Right = up to +8 dB"),
-            knob(px[3], 200, "PAN", -100, 100, 0,
+            knob(px[3], 184, "PAN", -100, 100, 0,
                  [f'<binding type="amp" level="group" {tg} parameter="PAN"/>'],
                  tags=f"pk,{t}", pname=f"{note_name(p['note'])} {p['name']} ", w=84, h=100, visible=False, snap="whole_numbers", dflt=0),
         ]]
     # DEEP toggle goes LAST: on load Decent Sampler fires every control's bindings in
     # file order, so this one's 'hide deep page' must come after the pad menu's 'show pad'.
-    L.append('      <button x="692" y="12" width="104" height="24" value="0" style="text" '
+    L.append('      <button x="692" y="8" width="104" height="24" value="0" style="text" '
              'tooltip="Per-pad tune, length, level, pan + velocity response">')
     L.append('        <state name="DEEP EDIT  ›">')
     for b in (vis("main", 1), vis("deep", 0), vis("pk", 0)):
@@ -332,7 +332,7 @@ def build_preset(pads, kit_name, sample_dir_rel, bg_rel, cover_rel, rr_counts):
 def grid_cells(n):
     """4x4 pad grid, MPC order: first pad bottom-left."""
     cells = []
-    x0, y0, w, h, g = 16, 60, 103, 72, 3
+    x0, y0, w, h, g = 16, 46, 103, 62, 3
     for i in range(n):
         r, c = divmod(i, 4)
         cells.append((x0 + c * (w + g), y0 + (3 - r) * (h + g), w, h))
