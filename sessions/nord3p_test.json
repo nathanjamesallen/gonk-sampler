@@ -1,0 +1,14 @@
+{
+  "name": "Nord3P Test",
+  "midi_channel": 10,
+  "bpm": 80,
+  "bars_per_hit": 1,
+  "gap_bars": 2,
+  "velocities": [20, 45, 70, 95, 115, 127],
+  "round_robins": 2,
+  "passes": ["clean", "bonkers"],
+  "sounds": [
+    {"name": "kick", "note": 60, "role": "kick"},
+    {"name": "hat",  "note": 67, "role": "hat"}
+  ]
+}
