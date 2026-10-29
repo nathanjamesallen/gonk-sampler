@@ -19,9 +19,10 @@ EPS = 1e-12
 def db(x): return 20 * np.log10(np.maximum(x, EPS))
 
 ROLE_TARGET = {"kick": -13, "snare": -14, "tom": -14, "perc": -15, "zap": -15,
-               "bell": -17, "hat": -18, "cymbal": -18}            # short-term RMS, dBFS
+               "bell": -17, "hat": -18, "cymbal": -18, "clap": -15}            # short-term RMS, dBFS
 ROLE_COLOR = {"kick": "#E8553D", "snare": "#F2A43A", "tom": "#D9C34A", "perc": "#5FBF8F",
-              "zap": "#4FB3D9", "bell": "#8C7BE0", "hat": "#C9D1D9", "cymbal": "#9AA6B2"}
+              "zap": "#4FB3D9", "bell": "#8C7BE0", "hat": "#C9D1D9", "cymbal": "#9AA6B2",
+              "clap": "#E07AA8"}
 NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 def note_name(n): return f"{NOTE_NAMES[n % 12]}{n // 12 - 2}"   # Ableton/DS: 60 = C3
 

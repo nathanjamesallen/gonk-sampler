@@ -10,9 +10,9 @@
   "sounds": [
     {"name": "kick",  "note": 60, "role": "kick"},
     {"name": "snare", "note": 62, "role": "snare"},
-    {"name": "tom lo", "note": 64, "role": "tom"},
-    {"name": "tom hi", "note": 65, "role": "tom"},
+    {"name": "ping",  "note": 64, "role": "bell"},
+    {"name": "clap",  "note": 65, "role": "clap"},
     {"name": "hat",   "note": 67, "role": "hat"},
-    {"name": "perc",  "note": 69, "role": "perc"}
+    {"name": "cymb",  "note": 69, "role": "cymbal"}
   ]
 }
