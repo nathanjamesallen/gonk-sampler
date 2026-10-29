@@ -37,6 +37,8 @@ Three steps, any hardware:
    Turn the Gonkulator up between passes. Export each pass as `<Name>_<pass>.wav` (e.g. `Nord3P_Kit1_bonkers.wav`), same sample rate, starting at bar 1.
 3. **Build** — `python3 capture/run.py sessions/out/Nord3P_Kit1_map.json ~/Rec/Nord3P_Kit1_*.wav --name "Gonk Nord Kit 1"`
 
+If an export starts after bar 1 (no sync hit), add `--no-sync` to capture.py: the first sound is taken as the first hit.
+
 Fix one sound without re-recording the kit: make a spec with just that sound (e.g. `sessions/nord3p_kit1_hat.json`), record it, capture it, then
 `python3 capture/merge.py --out <merged> <kit capture> <patch capture>` and build from `<merged>`. Later captures win per note and pass.
 

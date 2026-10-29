@@ -82,7 +82,7 @@ def refine(m, sr, t, floor_db=-120):
     return max(0, s) / sr
 
 
-def process_pass(path, M, pas, out, tail_db=-60, verbose=True):
+def process_pass(path, M, pas, out, tail_db=-60, verbose=True, no_sync=False):
     """tail_db: trim where the tail falls this far below the hit's peak (or 8 dB over the noise)."""
     y, sr = sf.read(path, always_2d=True, dtype="float64")
     m = y.mean(axis=1)
@@ -94,6 +94,9 @@ def process_pass(path, M, pas, out, tail_db=-60, verbose=True):
     if not len(above):
         raise SystemExit(f"{os.path.basename(path)}: no audio found")
     t0 = refine(m, sr, above[0] * hop / sr, floor)
+    if no_sync:
+        # export started after bar 1: the first sound IS the first hit in the map
+        t0 -= M["hits"][0]["seconds"]
     hits = M["hits"]
     sched = np.array([h["seconds"] for h in hits])
     # 2. coarse
@@ -197,6 +200,8 @@ def main():
     ap.add_argument("wavs", nargs="+")
     ap.add_argument("--out", required=True)
     ap.add_argument("--tail-db", type=float, default=-60)
+    ap.add_argument("--no-sync", action="store_true",
+                    help="file has no bar-1 sync hit (export started later): first sound = first hit")
     a = ap.parse_args()
     M = json.load(open(a.map))
     passes = [p.lower() for p in M["passes"]]
@@ -207,7 +212,7 @@ def main():
         pas = mm.group(1).lower() if mm else None
         if pas not in passes:
             sys.exit(f"{os.path.basename(w)}: name must end in _<pass>.wav, one of {passes}")
-        r, s, sr = process_pass(w, M, pas, a.out, a.tail_db)
+        r, s, sr = process_pass(w, M, pas, a.out, a.tail_db, no_sync=a.no_sync)
         rows += r; stats.append(s); srs.add(sr)
         print(f"  {pas:8s} found {s['found']}/{s['total']}  sync at {s['sync_s']:.3f} s  "
               f"drift {s['drift_ppm']:+.1f} ppm  timing p95 {s['timing_err_ms_p95']} ms  floor {s['floor_db']} dB")
