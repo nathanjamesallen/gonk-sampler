@@ -1,0 +1,17 @@
+{
+  "name": "Nord3P CC Test",
+  "midi_channel": 10,
+  "bpm": 80,
+  "bars_per_hit": 1,
+  "gap_bars": 1,
+  "velocities": [100],
+  "round_robins": 4,
+  "passes": ["clean"],
+  "sounds": [
+    {"name": "hat as is",   "note": 67, "role": "hat"},
+    {"name": "hat short",   "note": 67, "role": "hat",     "cc": {"21": 10,  "50": 10}},
+    {"name": "hat long",    "note": 67, "role": "openhat", "cc": {"21": 120, "50": 120}},
+    {"name": "ping steps",  "note": 64, "role": "bell",    "rr_cc": {"31": [30, 60, 90, 120]}},
+    {"name": "kick prog 2", "note": 60, "role": "kick",    "program": 1}
+  ]
+}

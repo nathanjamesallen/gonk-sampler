@@ -23,7 +23,7 @@ Check `gonk_out/_work/<take>/contact.png` before shipping a pack.
 | `pipeline/gonk_build.py` | loudness matching, `.dspreset` (RR modes, deep edit page, drive/crush buses), art, packaging |
 | `pipeline/contact_sheet.py` | spectrogram sheet of every pad's RR hits |
 | `pipeline/mock_ui.py` | rough preview render of the preset UI (Decent Sampler itself is the real test) |
-| `capture/` | assembly line: `session.py` (spec → MIDI + map), `capture.py` (align + cut + QA), `build_layered.py` (instrument), `run.py` (one command) |
+| `capture/` | assembly line (`layout.py` = GM pad map): `session.py` (spec → MIDI + map), `capture.py` (align + cut + QA), `build_layered.py` (instrument), `run.py` (one command) |
 | `sessions/` | session specs (`nord3p_kit1.json`) and generated clips/maps |
 | `tests/` | `simulate_session.py` — fake a recorded session to test without hardware |
 
@@ -46,7 +46,10 @@ What the capture step does: finds the bar-1 sync hit, fits latency + clock drift
 cuts it to just before the next one, trims the dead tail, and prints a QA report (missing triggers, clipping,
 velocity layers that don't get louder, round robins that don't match). It refuses to build with missing hits unless `--force`.
 
-What you get: one pad per sound from C1, every pad with all velocity layers and round robins, a **GONK** menu that
+Pads follow the General MIDI drum map on the 16 pads of a 4×4 (kick 36, snare 38, clap 39, closed hat 42, open hat 46, crash 49, ride 51, toms 41–50); empty slots show dimmed, ready to fill from the next preset.
+Session specs can also drive the Nord mid-clip: `"programs"` repeats the pattern for each preset (Program Change), `"cc"` makes derived sounds (e.g. an open hat from the hat with longer decay), `"rr_cc"` nudges a parameter per round robin. Check new CC ideas with `sessions/nord3p_cc_test.json` first.
+
+What you get: one pad per sound, every pad with all velocity layers and round robins, a **GONK** menu that
 switches passes (loudness-matched, so it changes character, not volume), PITCH / TONE / CRUSH / SPACE / VELOCITY / LEVEL,
 DEEP EDIT per pad, plus a one-shot zip organised Pass/Sound.
 

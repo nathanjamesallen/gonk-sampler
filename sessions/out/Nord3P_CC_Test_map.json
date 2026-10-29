@@ -1,0 +1,315 @@
+{
+ "name": "Nord3P CC Test",
+ "bpm": 80,
+ "seconds_per_bar": 3.0,
+ "midi_channel": 10,
+ "velocities": [
+  100
+ ],
+ "round_robins": 4,
+ "passes": [
+  "clean"
+ ],
+ "sounds": [
+  {
+   "name": "hat as is",
+   "note": 67,
+   "role": "hat",
+   "slot": 42,
+   "slot_fixed": false
+  },
+  {
+   "name": "hat short",
+   "note": 67,
+   "role": "hat",
+   "slot": 44,
+   "slot_fixed": false,
+   "cc": {
+    "21": 10,
+    "50": 10
+   }
+  },
+  {
+   "name": "hat long",
+   "note": 67,
+   "role": "openhat",
+   "slot": 46,
+   "slot_fixed": false,
+   "cc": {
+    "21": 120,
+    "50": 120
+   }
+  },
+  {
+   "name": "ping steps",
+   "note": 64,
+   "role": "bell",
+   "slot": 37,
+   "slot_fixed": false,
+   "rr_cc": {
+    "31": [
+     30,
+     60,
+     90,
+     120
+    ]
+   }
+  },
+  {
+   "name": "kick prog 2",
+   "note": 60,
+   "role": "kick",
+   "slot": 36,
+   "slot_fixed": false,
+   "program": 1
+  }
+ ],
+ "sync": {
+  "seconds": 0.0,
+  "note": 67,
+  "velocity": 127
+ },
+ "total_seconds": 87.0,
+ "hits": [
+  {
+   "index": 0,
+   "sound": 0,
+   "name": "hat as is",
+   "role": "hat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 6.0,
+   "window": 3.0
+  },
+  {
+   "index": 1,
+   "sound": 0,
+   "name": "hat as is",
+   "role": "hat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 9.0,
+   "window": 3.0
+  },
+  {
+   "index": 2,
+   "sound": 0,
+   "name": "hat as is",
+   "role": "hat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 12.0,
+   "window": 3.0
+  },
+  {
+   "index": 3,
+   "sound": 0,
+   "name": "hat as is",
+   "role": "hat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 15.0,
+   "window": 3.0
+  },
+  {
+   "index": 4,
+   "sound": 1,
+   "name": "hat short",
+   "role": "hat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 21.0,
+   "window": 3.0
+  },
+  {
+   "index": 5,
+   "sound": 1,
+   "name": "hat short",
+   "role": "hat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 24.0,
+   "window": 3.0
+  },
+  {
+   "index": 6,
+   "sound": 1,
+   "name": "hat short",
+   "role": "hat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 27.0,
+   "window": 3.0
+  },
+  {
+   "index": 7,
+   "sound": 1,
+   "name": "hat short",
+   "role": "hat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 30.0,
+   "window": 3.0
+  },
+  {
+   "index": 8,
+   "sound": 2,
+   "name": "hat long",
+   "role": "openhat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 36.0,
+   "window": 3.0
+  },
+  {
+   "index": 9,
+   "sound": 2,
+   "name": "hat long",
+   "role": "openhat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 39.0,
+   "window": 3.0
+  },
+  {
+   "index": 10,
+   "sound": 2,
+   "name": "hat long",
+   "role": "openhat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 42.0,
+   "window": 3.0
+  },
+  {
+   "index": 11,
+   "sound": 2,
+   "name": "hat long",
+   "role": "openhat",
+   "note": 67,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 45.0,
+   "window": 3.0
+  },
+  {
+   "index": 12,
+   "sound": 3,
+   "name": "ping steps",
+   "role": "bell",
+   "note": 64,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 51.0,
+   "window": 3.0
+  },
+  {
+   "index": 13,
+   "sound": 3,
+   "name": "ping steps",
+   "role": "bell",
+   "note": 64,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 54.0,
+   "window": 3.0
+  },
+  {
+   "index": 14,
+   "sound": 3,
+   "name": "ping steps",
+   "role": "bell",
+   "note": 64,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 57.0,
+   "window": 3.0
+  },
+  {
+   "index": 15,
+   "sound": 3,
+   "name": "ping steps",
+   "role": "bell",
+   "note": 64,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 60.0,
+   "window": 3.0
+  },
+  {
+   "index": 16,
+   "sound": 4,
+   "name": "kick prog 2",
+   "role": "kick",
+   "note": 60,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 66.0,
+   "window": 3.0
+  },
+  {
+   "index": 17,
+   "sound": 4,
+   "name": "kick prog 2",
+   "role": "kick",
+   "note": 60,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 69.0,
+   "window": 3.0
+  },
+  {
+   "index": 18,
+   "sound": 4,
+   "name": "kick prog 2",
+   "role": "kick",
+   "note": 60,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 72.0,
+   "window": 3.0
+  },
+  {
+   "index": 19,
+   "sound": 4,
+   "name": "kick prog 2",
+   "role": "kick",
+   "note": 60,
+   "velocity": 100,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 75.0,
+   "window": 3.0
+  }
+ ]
+}

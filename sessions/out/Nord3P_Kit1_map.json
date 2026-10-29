@@ -23,32 +23,44 @@
   {
    "name": "kick",
    "note": 60,
-   "role": "kick"
+   "role": "kick",
+   "slot": 36,
+   "slot_fixed": false
   },
   {
    "name": "snare",
    "note": 62,
-   "role": "snare"
+   "role": "snare",
+   "slot": 38,
+   "slot_fixed": false
   },
   {
    "name": "ping",
    "note": 64,
-   "role": "bell"
+   "role": "bell",
+   "slot": 37,
+   "slot_fixed": false
   },
   {
    "name": "clap",
    "note": 65,
-   "role": "clap"
+   "role": "clap",
+   "slot": 39,
+   "slot_fixed": false
   },
   {
    "name": "hat",
    "note": 67,
-   "role": "hat"
+   "role": "hat",
+   "slot": 42,
+   "slot_fixed": false
   },
   {
    "name": "cymb",
    "note": 69,
-   "role": "cymbal"
+   "role": "cymbal",
+   "slot": 49,
+   "slot_fixed": false
   }
  ],
  "sync": {

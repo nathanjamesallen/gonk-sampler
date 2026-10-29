@@ -27,6 +27,11 @@ import numpy as np, soundfile as sf
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pipeline"))
 from gonk_build import (ROLE_TARGET, ROLE_COLOR, note_name, finish, make_art, knob, vis,
                         LENGTH_TABLE, db)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from layout import assign_slots, GM_NAMES, GRID
+for _r, _t, _c in (("rim", -16, "#E8A23D"), ("openhat", -18, "#AEB8C2"), ("pedalhat", -19, "#B9C2CB"),
+                   ("ride", -18, "#8C99A6")):
+    ROLE_TARGET.setdefault(_r, _t); ROLE_COLOR.setdefault(_r, _c)
 
 KEEP_DYNAMICS = 0.7
 PEAK_CEILING = -1.0
@@ -37,6 +42,14 @@ def vel_ranges(vels):
     vs = sorted(vels)
     edges = [0] + [int((a + b) // 2) + 1 for a, b in zip(vs, vs[1:])] + [128]
     return {v: (edges[i], edges[i + 1] - 1) for i, v in enumerate(vs)}
+
+
+def slot_cell(note):
+    """2 x 8 grid of the 16 GM pads: bottom row 36-43, top row 44-51 (pad order of a 4x4, read left to right)."""
+    i = note - 36
+    r, c = divmod(i, 8)
+    g, x0, w, h = 3, 16, 95, 58
+    return (x0 + c * (w + g), 48 + (1 - r) * (h + g), w, h)
 
 
 def cells_for(n):
@@ -58,6 +71,7 @@ def process(C, cap_dir, lib_dir):
     passes = C["passes"]; ref = passes[0]
     hits = [h for h in C["hits"] if not h["missing"]]
     pads = []
+    assign_slots(C["sounds"])          # older captures have no slot yet: fill from roles
     for si, s in enumerate(C["sounds"]):
         hs = [h for h in hits if h["sound"] == si]
         if not hs:
@@ -88,9 +102,12 @@ def process(C, cap_dir, lib_dir):
             os.makedirs(os.path.join(lib_dir, "Samples", h["pass_"]), exist_ok=True)
             sf.write(os.path.join(lib_dir, rel), y, sr, subtype="PCM_24")
             files[(h["pass_"], h["velocity"], h["rr"])] = rel
-        pads.append(dict(pad=len(pads), sound=si, name=s["name"], role=role, note=BASE_NOTE + len(pads),
+        pads.append(dict(pad=len(pads), sound=si, name=s["name"], role=role, note=int(s["slot"]),
                          files=files, trim_db=round(trim, 1),
                          layer_db={int(l): round(v + trim, 1) for l, v in out_level.items()}))
+    pads.sort(key=lambda p: p["note"])
+    for i, p in enumerate(pads):
+        p["pad"] = i
     return pads
 
 
@@ -109,12 +126,25 @@ def build_xml(C, pads, name, subtitle, default_pass):
                  f'borderColor="{border}" borderThickness="{bt}"{extra}/>')
     rect(0, 0, 812, 40, "FF0E0F11"); rect(0, 40, 812, 2, "FFE8553D")
     rect(16, 172, 781, 80, "FF1B1C1F", "FF303136", 1)
-    cells = cells_for(len(pads))
+    on_grid = all(36 <= p["note"] <= 51 for p in pads)
+    cells = [slot_cell(p["note"]) for p in pads] if on_grid else cells_for(len(pads))
+    if on_grid:                                   # empty GM slots: dim, labelled, ready to fill
+        used = {p["note"] for p in pads}
+        for n in GRID:
+            if n in used: continue
+            x, y, w, h = slot_cell(n)
+            rect(x, y, w, h, "FF17181B", "FF26272B", 1)
     for p, (x, y, w, h) in zip(pads, cells):
         c = "FF" + ROLE_COLOR.get(p["role"], "#888888")[1:]
         rect(x, y, w, h, "FF202125", "FF303136", 1); rect(x, y, 4, h, c)
     L.append(f'      <label x="18" y="2" width="330" height="24" text={qa(name.upper())} textColor="FFF0ECE4" textSize="19" hAlign="left"/>')
     L.append(f'      <label x="18" y="25" width="330" height="13" text={qa(subtitle)} textColor="FF8A8B90" textSize="10" hAlign="left"/>')
+    if on_grid:
+        for n in GRID:
+            if n in {p["note"] for p in pads}: continue
+            x, y, w, h = slot_cell(n)
+            L.append(f'      <label x="{x+12}" y="{y+5}" width="40" height="14" text="{note_name(n)}" textColor="FF4A4B50" textSize="11" hAlign="left"/>')
+            L.append(f'      <label x="{x+12}" y="{y+38}" width="{w-16}" height="14" text={qa(GM_NAMES[n])} textColor="FF4A4B50" textSize="11" hAlign="left"/>')
     for p, (x, y, w, h) in zip(pads, cells):
         c = "FF" + ROLE_COLOR.get(p["role"], "#888888")[1:]
         L.append(f'      <label x="{x+12}" y="{y+5}" width="40" height="14" text="{note_name(p["note"])}" textColor="FF8A8B90" textSize="11" hAlign="left"/>')

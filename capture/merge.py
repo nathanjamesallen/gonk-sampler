@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
 """
-Patch one capture with another: re-record a sound (or a few) without redoing the whole kit.
+Combine captures into one kit, or patch a sound.
 
-    python3 capture/merge.py --out work/kit1_merged work/kit1 work/kit1_hat
+    # two Nord presets -> one 12-pad kit
+    python3 capture/merge.py --out work/kit1_full work/kit1A work/kit1B
+    # re-recorded hat replaces the hat from the first capture
+    python3 capture/merge.py --out work/kit1_fixed work/kit1 work/kit1_hat
 
-Later captures win per (MIDI note, pass): if the hat capture has hits for note 67
-in the clean pass, those replace whatever the first capture had for note 67 /
-clean (here: 24 missing hits). Everything else is kept. Pads come out ordered by
-MIDI note. The result is a normal capture folder for build_layered.py.
+Sounds are matched by NAME (case-insensitive): a later capture with the same
+name replaces that sound pass-by-pass (patch); a new name adds a pad. So name
+sounds uniquely across the kit ("kick", "kick 2").
+
+Pads: a slot set by hand in a spec ("slot": 46) is kept; everything else is
+(re)assigned on the GM map in capture order, so the first preset gets the
+primary slots (36 kick, 38 snare...) and the second fills the alternates.
 """
-import argparse, json, os, shutil
+import argparse, json, os, shutil, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from layout import assign_slots
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("captures", nargs="+", help="capture folders, base first, patches after")
+    ap.add_argument("captures", nargs="+", help="capture folders, in priority order")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     caps = [(d, json.load(open(os.path.join(d, "capture.json")))) for d in a.captures]
@@ -22,51 +31,59 @@ def main():
     for d, C in caps[1:]:
         if sorted(C["velocities"]) != sorted(base["velocities"]) or C["round_robins"] != base["round_robins"]:
             raise SystemExit(f"{d}: velocities/round robins differ from {caps[0][0]} — layers wouldn't line up")
-    # winner per (note, pass) = last capture that has at least one found hit there
-    chosen, sounds_by_note = {}, {}
+
+    # final sound list, first appearance order; later same-name entries update the definition
+    sounds, order = {}, []
     for ci, (d, C) in enumerate(caps):
         for s in C["sounds"]:
-            sounds_by_note[s["note"]] = s           # later spec names win too
+            k = s["name"].strip().lower()
+            if k not in sounds:
+                order.append(k)
+            prev = sounds.get(k, {})
+            sounds[k] = dict(prev, **s)
+    final = [dict(sounds[k]) for k in order]
+    for s in final:
+        if not s.get("slot_fixed"):
+            s.pop("slot", None)
+    assign_slots(final)
+    final.sort(key=lambda s: s["slot"])
+    idx = {s["name"].strip().lower(): i for i, s in enumerate(final)}
+
+    # winner per (sound name, pass) = last capture with a found hit
+    chosen = {}
+    for ci, (d, C) in enumerate(caps):
         for h in C["hits"]:
-            if h["missing"]:
-                continue
-            note = C["sounds"][h["sound"]]["note"]
-            chosen[(note, h["pass_"])] = ci
-    notes = sorted(sounds_by_note)
-    new_index = {n: i for i, n in enumerate(notes)}
+            if not h["missing"]:
+                chosen[(C["sounds"][h["sound"]]["name"].strip().lower(), h["pass_"])] = ci
     shutil.rmtree(a.out, ignore_errors=True)
     hits, passes = [], []
     for ci, (d, C) in enumerate(caps):
-        for p in C["passes"]:
-            if p not in passes:
-                passes.append(p)
+        passes += [p for p in C["passes"] if p not in passes]
         for h in C["hits"]:
-            note = C["sounds"][h["sound"]]["note"]
-            if chosen.get((note, h["pass_"])) != ci:
+            k = C["sounds"][h["sound"]]["name"].strip().lower()
+            if chosen.get((k, h["pass_"])) != ci:
                 continue
-            si = new_index[note]
-            s = sounds_by_note[note]
-            h = dict(h, sound=si, name=s["name"], role=s.get("role", "perc"))
+            s = final[idx[k]]
+            h = dict(h, sound=idx[k], name=s["name"], role=s.get("role", "perc"))
             if not h["missing"]:
-                fn = f"{si+1:02d}_{s['name'].replace(' ', '-')}_v{h['velocity']:03d}_rr{h['rr']}.wav"
+                fn = f"{s['slot']}_{s['name'].replace(' ', '-')}_v{h['velocity']:03d}_rr{h['rr']}.wav"
                 rel = os.path.join("hits", h["pass_"], fn)
                 os.makedirs(os.path.join(a.out, "hits", h["pass_"]), exist_ok=True)
                 shutil.copy2(os.path.join(d, h["file"]), os.path.join(a.out, rel))
                 h["file"] = rel
             hits.append(h)
-    # passes in the base's order first
-    order = base["passes"] + [p for p in passes if p not in base["passes"]]
-    out = dict(base, name=base["name"], passes=order,
-               sounds=[sounds_by_note[n] for n in notes], hits=hits,
+    po = base["passes"] + [p for p in passes if p not in base["passes"]]
+    out = dict(base, passes=po, sounds=final, hits=hits,
                stats=[s for _, C in caps for s in C["stats"]],
                warnings=[w for _, C in caps for w in C["warnings"] if "MISSING" not in w],
                merged_from=[os.path.abspath(d) for d, _ in caps])
     json.dump(out, open(os.path.join(a.out, "capture.json"), "w"), indent=1)
-    found = sum(1 for h in hits if not h["missing"])
-    print(f"merged {len(caps)} captures -> {len(notes)} sounds, {found} hits, passes {order}")
-    for n in notes:
-        src = sorted({caps[chosen[(n, p)]][0] for p in order if (n, p) in chosen})
-        print(f"  note {n:3d} {sounds_by_note[n]['name']:8s} from {', '.join(os.path.relpath(x) for x in src) or 'NOTHING'}")
+    print(f"merged {len(caps)} captures -> {len(final)} pads, "
+          f"{sum(1 for h in hits if not h['missing'])} hits, passes {po}")
+    for s in final:
+        k = s["name"].strip().lower()
+        src = sorted({os.path.relpath(caps[chosen[(k, p)]][0]) for p in po if (k, p) in chosen})
+        print(f"  pad {s['slot']:3d} {s['name']:10s} {s.get('role','perc'):8s} from {', '.join(src) or 'NOTHING'}")
 
 
 if __name__ == "__main__":
