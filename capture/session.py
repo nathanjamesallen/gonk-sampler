@@ -29,8 +29,13 @@ sets "slot": <note> itself.
 
 Changing the Nord mid-session (derived sounds):
     {"name": "open hat", "note": 67, "role": "openhat", "cc": {"21": 110}}
-Before that sound's block the clip sends Channel Select (CC 70) for the Nord
-channel that plays note 67, then each CC. Put derived sounds AFTER the sounds
+Before that sound's block the clip sends each CC to the Nord channel that
+plays note 67. Default "cc_mode": "individual" (manual p.14, documented):
+on the Nord set the individual MIDI channels Ch.1..Ch.6 for Nord channels
+1..6 (global stays 10), and the CC goes out on that MIDI channel.
+"cc_mode": "global" uses Channel Select (CC 70) on the global channel instead;
+its values are not documented clearly (manual example: ch 4 -> 71), so set
+"channel_select_values" from what your Nord actually sends. Put derived sounds AFTER the sounds
 they borrow from (the change sticks until you reload the preset), and reload the
 preset before every pass so each pass starts identical.
 Next preset, same pattern (one clip covers several Nord presets):
@@ -67,7 +72,11 @@ def build(spec):
     sounds = spec["sounds"]
     sync_note = spec.get("sync_note", sounds[0]["note"])
     note_ch = {int(k): v for k, v in spec.get("nord_channels", {}).items()} or NORD_NOTE_TO_CHANNEL
-    sel_vals = spec.get("channel_select_values", [0, 1, 2, 3, 4, 5])   # CC70 value for ch 1..6
+    cc_mode = spec.get("cc_mode", "individual")
+    sel_vals = spec.get("channel_select_values")                        # CC70 values for ch 1..6 (global mode)
+    indiv = {int(k): v for k, v in spec.get("individual_channels", {}).items()} or {i: i for i in range(1, 7)}
+    if cc_mode == "global" and not sel_vals:
+        raise SystemExit('cc_mode "global" needs "channel_select_values": [ch1..ch6 values your Nord sends for CC 70]')
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from layout import assign_slots
     progs = spec.get("programs")
@@ -78,7 +87,7 @@ def build(spec):
     sounds = [dict(s, slot_fixed=s.get("slot") is not None) for s in sounds]
     sounds = assign_slots(sounds)
 
-    events, hits = [("note", 0, sync_note, 127)], []
+    events, hits = [("note", 0, sync_note, 127, ch)], []
     cur_prog = None
     bar = 2                                    # bar 1 sync, bar 2 silent
     for si, s in enumerate(sounds):
@@ -87,49 +96,64 @@ def build(spec):
         step = tpb // 8
         if s.get("program") is not None and s.get("program") != cur_prog:
             if s.get("bank"):
-                events.append(("cc", t, 0, int(s["bank"][0]))); t += step
-                events.append(("cc", t, 32, int(s["bank"][1]))); t += step
-            events.append(("pc", t, int(s["program"]), 0)); t += 2 * step
+                events.append(("cc", t, 0, int(s["bank"][0]), ch)); t += step
+                events.append(("cc", t, 32, int(s["bank"][1]), ch)); t += step
+            events.append(("pc", t, int(s["program"]), 0, ch)); t += 2 * step
             cur_prog = s["program"]
         need_sel = s.get("cc") or s.get("rr_cc")
         ch_n = s.get("nord_channel") or note_ch.get(s["note"])
         if need_sel and ch_n is None:
             raise SystemExit(f"{s['name']}: can't tell which Nord channel plays note {s['note']} — add \"nord_channel\"")
+        def send_cc(t0, pairs, gap):
+            """individual: CC on the Nord channel's own MIDI channel; global: CC70 select first."""
+            evs = []
+            if cc_mode == "global":
+                evs.append(("cc", t0, CHANNEL_SELECT_CC, sel_vals[ch_n - 1], ch)); t0 += gap
+                mch = ch
+            else:
+                mch = indiv[ch_n] - 1
+            for cc, val in pairs:
+                evs.append(("cc", t0, int(cc), int(val), mch)); t0 += gap
+            return evs
         if s.get("cc"):
-            events.append(("cc", t, CHANNEL_SELECT_CC, sel_vals[ch_n - 1])); t += step
-            for cc, val in sorted(s["cc"].items(), key=lambda kv: int(kv[0])):
-                events.append(("cc", t, int(cc), int(val))); t += step
+            evs = send_cc(t, sorted(s["cc"].items(), key=lambda kv: int(kv[0])), step)
+            events += evs; t = evs[-1][1] + step
         rr_cc = s.get("rr_cc") or {}
         for li, v in enumerate(vels):
             for k in range(rr):
                 if rr_cc:                      # beat 4 of the bar before this hit: tail is gone
-                    tc = bar * bar_ticks - tpb
-                    events.append(("cc", tc, CHANNEL_SELECT_CC, sel_vals[ch_n - 1]))
-                    for j, (cc, vals) in enumerate(sorted(rr_cc.items(), key=lambda kv: int(kv[0]))):
-                        events.append(("cc", tc + (j + 1) * (tpb // 16), int(cc), int(vals[k % len(vals)])))
-                events.append(("note", bar * bar_ticks, s["note"], v))
+                    events += send_cc(bar * bar_ticks - tpb,
+                                      [(cc, vals[k % len(vals)]) for cc, vals in
+                                       sorted(rr_cc.items(), key=lambda kv: int(kv[0]))], tpb // 16)
+                events.append(("note", bar * bar_ticks, s["note"], v, ch))
                 hits.append(dict(index=len(hits), sound=si, name=s["name"], role=s.get("role", "perc"),
                                  note=s["note"], velocity=v, layer=li + 1, rr=k + 1,
                                  seconds=round(bar * bar_s, 4), window=round(bph * bar_s, 4)))
                 bar += bph
         bar += gap
     bar += 2
-    mid = mido.MidiFile(ticks_per_beat=tpb)
-    tr = mido.MidiTrack(); mid.tracks.append(tr)
-    tr += [mido.MetaMessage("track_name", name=spec["name"], time=0),
-           mido.MetaMessage("set_tempo", tempo=mido.bpm2tempo(bpm), time=0),
-           mido.MetaMessage("time_signature", numerator=4, denominator=4, time=0)]
-    now, nlen = 0, tpb // 8
-    for kind, t, a1, a2 in sorted(events, key=lambda e: e[1]):
-        if kind == "cc":
-            tr.append(mido.Message("control_change", channel=ch, control=a1, value=a2, time=t - now)); now = t
-            continue
-        if kind == "pc":
-            tr.append(mido.Message("program_change", channel=ch, program=a1, time=t - now)); now = t
-            continue
-        tr.append(mido.Message("note_on", channel=ch, note=a1, velocity=a2, time=t - now)); now = t
-        tr.append(mido.Message("note_off", channel=ch, note=a1, velocity=0, time=nlen)); now += nlen
-    tr.append(mido.MetaMessage("end_of_track", time=bar * bar_ticks - now))
+    # One MIDI track per MIDI channel: DAWs (Ableton) send a whole track on ONE channel,
+    # so notes/program changes (global ch) and each Nord channel's CCs get their own track.
+    mid = mido.MidiFile(type=1, ticks_per_beat=tpb)
+    nlen = tpb // 8
+    chans = [ch] + sorted({e[4] for e in events if e[4] != ch})
+    for c in chans:
+        tr = mido.MidiTrack(); mid.tracks.append(tr)
+        label = f"{spec['name']} notes (MIDI ch {c+1})" if c == ch else f"Nord ch {[k for k, v in indiv.items() if v - 1 == c][0] if c in [v - 1 for v in indiv.values()] else '?'} CCs (MIDI ch {c+1})"
+        tr.append(mido.MetaMessage("track_name", name=label, time=0))
+        if c == ch:
+            tr += [mido.MetaMessage("set_tempo", tempo=mido.bpm2tempo(bpm), time=0),
+                   mido.MetaMessage("time_signature", numerator=4, denominator=4, time=0)]
+        now = 0
+        for kind, t, a1, a2, mch in sorted([e for e in events if e[4] == c], key=lambda e: e[1]):
+            if kind == "cc":
+                tr.append(mido.Message("control_change", channel=mch, control=a1, value=a2, time=t - now)); now = t
+            elif kind == "pc":
+                tr.append(mido.Message("program_change", channel=mch, program=a1, time=t - now)); now = t
+            else:
+                tr.append(mido.Message("note_on", channel=mch, note=a1, velocity=a2, time=t - now)); now = t
+                tr.append(mido.Message("note_off", channel=mch, note=a1, velocity=0, time=nlen)); now += nlen
+        tr.append(mido.MetaMessage("end_of_track", time=max(0, bar * bar_ticks - now)))
     mapping = dict(name=spec["name"], bpm=bpm, seconds_per_bar=bar_s, midi_channel=ch + 1,
                    velocities=vels, round_robins=rr, passes=spec.get("passes", ["clean"]),
                    sounds=[dict(name=s["name"], note=s["note"], role=s.get("role", "perc"), slot=s["slot"], slot_fixed=s["slot_fixed"],
@@ -157,6 +181,10 @@ def main():
     print(f"{stem}: {len(mapping['hits'])} hits, {m/60:.1f} min per pass, "
           f"{len(mapping['passes'])} passes -> {m*len(mapping['passes'])/60:.0f} min total "
           f"(set your DAW to {mapping['bpm']} BPM, MIDI ch {mapping['midi_channel']})")
+    if len(mid.tracks) > 1:
+        print("   MIDI file has one track per channel — in the DAW set each track's output channel to match its name:")
+        for t in mid.tracks:
+            print("     -", t.name)
 
 
 if __name__ == "__main__":

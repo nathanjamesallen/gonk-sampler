@@ -53,7 +53,14 @@ What you get: one pad per sound, every pad with all velocity layers and round ro
 switches passes (loudness-matched, so it changes character, not volume), PITCH / TONE / CRUSH / SPACE / VELOCITY / LEVEL,
 DEEP EDIT per pad, plus a one-shot zip organised Pass/Sound.
 
-Nord Drum 3P setup: global MIDI channel 10, individual channels off, notes 60/62/64/65/67/69 for channels 1–6.
+Nord Drum 3P setup (Shift + MIDI, then the System/Pad menus; manual pp. 11–14):
+- GL = 10 (global channel: notes + program change)
+- Ch for Nord channels 1–6 = MIDI 1–6 (individual channels: per-channel CCs; never the same as GL)
+- nt = 60/62/64/65/67/69 for channels 1–6 (factory)
+- PC = r or sr (otherwise program changes are ignored)
+- Dy (dynamics curve) = dy.Li on every channel for capture (the offset curves flatten velocity layers)
+- Mono groups off, channel reverb/delay off
+Clips with per-channel CCs come as one MIDI track per channel: in Ableton set each track's output to the MIDI channel in its name.
 Split the Nord output on the first pass to capture Clean + Low together.
 
 Tested end-to-end on a simulated session (`tests/simulate_session.py`: real Nord hits, velocity-dependent tone,
