@@ -1,0 +1,564 @@
+{
+ "name": "Nord3P Kick Wild",
+ "bpm": 80,
+ "seconds_per_bar": 3.0,
+ "midi_channel": 10,
+ "velocities": [
+  110
+ ],
+ "round_robins": 4,
+ "passes": [
+  "clean"
+ ],
+ "sounds": [
+  {
+   "name": "W01 kick baseline",
+   "note": 60,
+   "role": "kick",
+   "slot": 60,
+   "slot_fixed": true
+  },
+  {
+   "name": "W02 pitch low-high A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 61,
+   "slot_fixed": true,
+   "rr_cc": {
+    "31": [
+     10,
+     120,
+     10,
+     120
+    ]
+   }
+  },
+  {
+   "name": "W03 decay snap-boom A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 62,
+   "slot_fixed": true,
+   "rr_cc": {
+    "50": [
+     0,
+     127,
+     0,
+     127
+    ]
+   }
+  },
+  {
+   "name": "W04 dist off-max A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 63,
+   "slot_fixed": true,
+   "rr_cc": {
+    "23": [
+     0,
+     127,
+     0,
+     127
+    ]
+   }
+  },
+  {
+   "name": "W05 bend off-max A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 64,
+   "slot_fixed": true,
+   "rr_cc": {
+    "54": [
+     0,
+     127,
+     0,
+     127
+    ],
+    "55": [
+     90,
+     90,
+     90,
+     90
+    ]
+   }
+  },
+  {
+   "name": "W06 808 boom vs gabber A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 65,
+   "slot_fixed": true,
+   "rr_cc": {
+    "31": [
+     15,
+     90,
+     15,
+     90
+    ],
+    "50": [
+     127,
+     30,
+     127,
+     30
+    ],
+    "23": [
+     0,
+     127,
+     0,
+     127
+    ],
+    "54": [
+     127,
+     0,
+     127,
+     0
+    ]
+   }
+  },
+  {
+   "name": "W07 dist type sweep",
+   "note": 60,
+   "role": "kick",
+   "slot": 66,
+   "slot_fixed": true,
+   "cc": {
+    "23": 110
+   },
+   "rr_cc": {
+    "24": [
+     0,
+     40,
+     80,
+     127
+    ]
+   }
+  },
+  {
+   "name": "W08 chaos round robins",
+   "note": 60,
+   "role": "kick",
+   "slot": 67,
+   "slot_fixed": true,
+   "rr_cc": {
+    "31": [
+     20,
+     70,
+     45,
+     110
+    ],
+    "50": [
+     100,
+     20,
+     60,
+     127
+    ],
+    "23": [
+     90,
+     10,
+     127,
+     50
+    ],
+    "54": [
+     0,
+     127,
+     60,
+     30
+    ]
+   }
+  }
+ ],
+ "sync": {
+  "seconds": 0.0,
+  "note": 60,
+  "velocity": 127
+ },
+ "total_seconds": 171.0,
+ "hits": [
+  {
+   "index": 0,
+   "sound": 0,
+   "name": "W01 kick baseline",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 6.0,
+   "window": 3.0
+  },
+  {
+   "index": 1,
+   "sound": 0,
+   "name": "W01 kick baseline",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 9.0,
+   "window": 3.0
+  },
+  {
+   "index": 2,
+   "sound": 0,
+   "name": "W01 kick baseline",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 12.0,
+   "window": 3.0
+  },
+  {
+   "index": 3,
+   "sound": 0,
+   "name": "W01 kick baseline",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 15.0,
+   "window": 3.0
+  },
+  {
+   "index": 4,
+   "sound": 1,
+   "name": "W02 pitch low-high A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 21.0,
+   "window": 3.0
+  },
+  {
+   "index": 5,
+   "sound": 1,
+   "name": "W02 pitch low-high A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 24.0,
+   "window": 3.0
+  },
+  {
+   "index": 6,
+   "sound": 1,
+   "name": "W02 pitch low-high A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 27.0,
+   "window": 3.0
+  },
+  {
+   "index": 7,
+   "sound": 1,
+   "name": "W02 pitch low-high A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 30.0,
+   "window": 3.0
+  },
+  {
+   "index": 8,
+   "sound": 2,
+   "name": "W03 decay snap-boom A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 36.0,
+   "window": 6.0
+  },
+  {
+   "index": 9,
+   "sound": 2,
+   "name": "W03 decay snap-boom A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 42.0,
+   "window": 6.0
+  },
+  {
+   "index": 10,
+   "sound": 2,
+   "name": "W03 decay snap-boom A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 48.0,
+   "window": 6.0
+  },
+  {
+   "index": 11,
+   "sound": 2,
+   "name": "W03 decay snap-boom A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 54.0,
+   "window": 6.0
+  },
+  {
+   "index": 12,
+   "sound": 3,
+   "name": "W04 dist off-max A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 63.0,
+   "window": 3.0
+  },
+  {
+   "index": 13,
+   "sound": 3,
+   "name": "W04 dist off-max A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 66.0,
+   "window": 3.0
+  },
+  {
+   "index": 14,
+   "sound": 3,
+   "name": "W04 dist off-max A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 69.0,
+   "window": 3.0
+  },
+  {
+   "index": 15,
+   "sound": 3,
+   "name": "W04 dist off-max A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 72.0,
+   "window": 3.0
+  },
+  {
+   "index": 16,
+   "sound": 4,
+   "name": "W05 bend off-max A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 78.0,
+   "window": 3.0
+  },
+  {
+   "index": 17,
+   "sound": 4,
+   "name": "W05 bend off-max A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 81.0,
+   "window": 3.0
+  },
+  {
+   "index": 18,
+   "sound": 4,
+   "name": "W05 bend off-max A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 84.0,
+   "window": 3.0
+  },
+  {
+   "index": 19,
+   "sound": 4,
+   "name": "W05 bend off-max A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 87.0,
+   "window": 3.0
+  },
+  {
+   "index": 20,
+   "sound": 5,
+   "name": "W06 808 boom vs gabber A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 93.0,
+   "window": 6.0
+  },
+  {
+   "index": 21,
+   "sound": 5,
+   "name": "W06 808 boom vs gabber A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 99.0,
+   "window": 6.0
+  },
+  {
+   "index": 22,
+   "sound": 5,
+   "name": "W06 808 boom vs gabber A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 105.0,
+   "window": 6.0
+  },
+  {
+   "index": 23,
+   "sound": 5,
+   "name": "W06 808 boom vs gabber A-B",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 111.0,
+   "window": 6.0
+  },
+  {
+   "index": 24,
+   "sound": 6,
+   "name": "W07 dist type sweep",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 120.0,
+   "window": 3.0
+  },
+  {
+   "index": 25,
+   "sound": 6,
+   "name": "W07 dist type sweep",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 123.0,
+   "window": 3.0
+  },
+  {
+   "index": 26,
+   "sound": 6,
+   "name": "W07 dist type sweep",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 126.0,
+   "window": 3.0
+  },
+  {
+   "index": 27,
+   "sound": 6,
+   "name": "W07 dist type sweep",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 129.0,
+   "window": 3.0
+  },
+  {
+   "index": 28,
+   "sound": 7,
+   "name": "W08 chaos round robins",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 1,
+   "seconds": 135.0,
+   "window": 6.0
+  },
+  {
+   "index": 29,
+   "sound": 7,
+   "name": "W08 chaos round robins",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 2,
+   "seconds": 141.0,
+   "window": 6.0
+  },
+  {
+   "index": 30,
+   "sound": 7,
+   "name": "W08 chaos round robins",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 3,
+   "seconds": 147.0,
+   "window": 6.0
+  },
+  {
+   "index": 31,
+   "sound": 7,
+   "name": "W08 chaos round robins",
+   "role": "kick",
+   "note": 60,
+   "velocity": 110,
+   "layer": 1,
+   "rr": 4,
+   "seconds": 153.0,
+   "window": 6.0
+  }
+ ]
+}
