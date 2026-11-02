@@ -62,6 +62,7 @@ Nord Drum 3P setup (Shift + MIDI, then the System/Pad menus; manual pp. 11–14)
 - Dy (dynamics curve) = dy.Li on every channel for capture (the offset curves flatten velocity layers)
 - Mono groups off, channel reverb/delay off
 Clips with per-channel CCs come as one MIDI track per channel: in Ableton set each track's output to the MIDI channel in its name.
+Single-sound clips can use "cc_mode": "focus": everything on channel 10, select that channel with CH SELECT on the Nord before playing.
 Split the Nord output on the first pass to capture Clean + Low together.
 
 Tested end-to-end on a simulated session (`tests/simulate_session.py`: real Nord hits, velocity-dependent tone,

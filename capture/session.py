@@ -33,6 +33,8 @@ Before that sound's block the clip sends each CC to the Nord channel that
 plays note 67. Default "cc_mode": "individual" (manual p.14, documented):
 on the Nord set the individual MIDI channels Ch.1..Ch.6 for Nord channels
 1..6 (global stays 10), and the CC goes out on that MIDI channel.
+"cc_mode": "focus" sends CCs on the global channel to the channel you selected with
+CH SELECT on the Nord (one track; one Nord channel per clip).
 "cc_mode": "global" uses Channel Select (CC 70) on the global channel instead;
 its values are not documented clearly (manual example: ch 4 -> 71), so set
 "channel_select_values" from what your Nord actually sends. Put derived sounds AFTER the sounds
@@ -109,7 +111,12 @@ def build(spec):
             A sound may override with "cc_mode" and "select_value" (for testing encodings)."""
             evs = []
             mode = s.get("cc_mode", cc_mode)
-            if mode == "global":
+            if mode == "focus":
+                # manual p.14: CCs on the GLOBAL channel go to whichever Nord channel is selected
+                # with CH SELECT on the panel. One track, no individual channels needed — but only
+                # one Nord channel can be edited per clip (select it before pressing play).
+                mch = ch
+            elif mode == "global":
                 sv = s.get("select_value", sel_vals[ch_n - 1] if sel_vals else None)
                 if sv is None:
                     raise SystemExit(f"{s['name']}: global cc_mode needs a select_value")

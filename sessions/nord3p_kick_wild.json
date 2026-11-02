@@ -1,25 +1,170 @@
 {
-  "name": "Nord3P Kick Wild",
-  "midi_channel": 10,
-  "bpm": 80,
-  "bars_per_hit": 1,
-  "gap_bars": 1,
-  "lead_in_bars": 1,
-  "velocities": [110],
-  "round_robins": 4,
-  "passes": ["clean"],
-  "sounds": [
-    {"name": "W01 kick baseline",          "note": 60, "role": "kick", "slot": 60},
-    {"name": "W02 pitch low-high A-B",     "note": 60, "role": "kick", "slot": 61, "rr_cc": {"31": [10, 120, 10, 120]}},
-    {"name": "W03 decay snap-boom A-B",    "note": 60, "role": "kick", "slot": 62, "bars_per_hit": 2,
-     "rr_cc": {"50": [0, 127, 0, 127]}},
-    {"name": "W04 dist off-max A-B",       "note": 60, "role": "kick", "slot": 63, "rr_cc": {"23": [0, 127, 0, 127]}},
-    {"name": "W05 bend off-max A-B",       "note": 60, "role": "kick", "slot": 64, "rr_cc": {"54": [0, 127, 0, 127], "55": [90, 90, 90, 90]}},
-    {"name": "W06 808 boom vs gabber A-B", "note": 60, "role": "kick", "slot": 65, "bars_per_hit": 2,
-     "rr_cc": {"31": [15, 90, 15, 90], "50": [127, 30, 127, 30], "23": [0, 127, 0, 127], "54": [127, 0, 127, 0]}},
-    {"name": "W07 dist type sweep",        "note": 60, "role": "kick", "slot": 66,
-     "cc": {"23": 110}, "rr_cc": {"24": [0, 40, 80, 127]}},
-    {"name": "W08 chaos round robins",     "note": 60, "role": "kick", "slot": 67, "bars_per_hit": 2,
-     "rr_cc": {"31": [20, 70, 45, 110], "50": [100, 20, 60, 127], "23": [90, 10, 127, 50], "54": [0, 127, 60, 30]}}
-  ]
+ "name": "Nord3P Kick Wild",
+ "midi_channel": 10,
+ "bpm": 80,
+ "bars_per_hit": 1,
+ "gap_bars": 1,
+ "lead_in_bars": 1,
+ "velocities": [
+  110
+ ],
+ "round_robins": 4,
+ "passes": [
+  "clean"
+ ],
+ "sounds": [
+  {
+   "name": "W01 kick baseline",
+   "note": 60,
+   "role": "kick",
+   "slot": 60
+  },
+  {
+   "name": "W02 pitch low-high A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 61,
+   "rr_cc": {
+    "31": [
+     10,
+     120,
+     10,
+     120
+    ]
+   }
+  },
+  {
+   "name": "W03 decay snap-boom A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 62,
+   "bars_per_hit": 2,
+   "rr_cc": {
+    "50": [
+     0,
+     127,
+     0,
+     127
+    ]
+   }
+  },
+  {
+   "name": "W04 dist off-max A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 63,
+   "rr_cc": {
+    "23": [
+     0,
+     127,
+     0,
+     127
+    ]
+   }
+  },
+  {
+   "name": "W05 bend off-max A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 64,
+   "rr_cc": {
+    "54": [
+     0,
+     127,
+     0,
+     127
+    ],
+    "55": [
+     90,
+     90,
+     90,
+     90
+    ]
+   }
+  },
+  {
+   "name": "W06 808 boom vs gabber A-B",
+   "note": 60,
+   "role": "kick",
+   "slot": 65,
+   "bars_per_hit": 2,
+   "rr_cc": {
+    "31": [
+     15,
+     90,
+     15,
+     90
+    ],
+    "50": [
+     127,
+     30,
+     127,
+     30
+    ],
+    "23": [
+     0,
+     127,
+     0,
+     127
+    ],
+    "54": [
+     127,
+     0,
+     127,
+     0
+    ]
+   }
+  },
+  {
+   "name": "W07 dist type sweep",
+   "note": 60,
+   "role": "kick",
+   "slot": 66,
+   "cc": {
+    "23": 110
+   },
+   "rr_cc": {
+    "24": [
+     0,
+     40,
+     80,
+     127
+    ]
+   }
+  },
+  {
+   "name": "W08 chaos round robins",
+   "note": 60,
+   "role": "kick",
+   "slot": 67,
+   "bars_per_hit": 2,
+   "rr_cc": {
+    "31": [
+     20,
+     70,
+     45,
+     110
+    ],
+    "50": [
+     100,
+     20,
+     60,
+     127
+    ],
+    "23": [
+     90,
+     10,
+     127,
+     50
+    ],
+    "54": [
+     0,
+     127,
+     60,
+     30
+    ]
+   }
+  }
+ ],
+ "cc_mode": "focus"
 }
