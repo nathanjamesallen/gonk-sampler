@@ -56,7 +56,7 @@ DEEP EDIT per pad, plus a one-shot zip organised Pass/Sound.
 Nord Drum 3P setup (Shift + MIDI, then the System/Pad menus; manual pp. 11–14):
 - GL = 10 (global channel: notes + program change)
 - Ch for Nord channels 1–6 = MIDI 1–6 (individual channels: per-channel CCs; never the same as GL)
-- nt = 60/62/64/65/67/69 for channels 1–6 (factory)
+- nt = 60/62/64/65/67/68 for channels 1–6 (this unit: ch 6 = 68; factory is 69)
 - PC = r or sr (otherwise program changes are ignored)
 - Dy (dynamics curve) = dy.Li on every channel for capture (the offset curves flatten velocity layers)
 - Mono groups off, channel reverb/delay off

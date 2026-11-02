@@ -56,7 +56,7 @@ import json, os, sys
 import mido
 
 SYNC_NOTE_DEFAULT = None   # sync hit uses the first sound's note at velocity 127
-NORD_NOTE_TO_CHANNEL = {60: 1, 62: 2, 64: 3, 65: 4, 67: 5, 69: 6}   # factory note map
+NORD_NOTE_TO_CHANNEL = {60: 1, 62: 2, 64: 3, 65: 4, 67: 5, 68: 6, 69: 6}   # ch 6 = 68 on this unit (factory 69)
 CHANNEL_SELECT_CC = 70
 
 

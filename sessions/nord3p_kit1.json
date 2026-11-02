@@ -13,6 +13,6 @@
     {"name": "ping",  "note": 64, "role": "bell"},
     {"name": "clap",  "note": 65, "role": "clap"},
     {"name": "hat",   "note": 67, "role": "hat"},
-    {"name": "cymb",  "note": 69, "role": "cymbal"}
+    {"name": "cymb",  "note": 68, "role": "cymbal"}
   ]
 }
