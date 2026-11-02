@@ -126,6 +126,8 @@ def build(spec):
                 mch = indiv[ch_n] - 1
             for cc, val in pairs:
                 evs.append(("cc", t0, int(cc), int(val), mch)); t0 += gap
+                if int(cc) == 31:              # tone pitch is 14-bit: follow the MSB with LSB (CC 63)
+                    evs.append(("cc", t0, 63, 0, mch)); t0 += gap
             return evs
         if s.get("cc"):
             evs = send_cc(t, sorted(s["cc"].items(), key=lambda kv: int(kv[0])), step)

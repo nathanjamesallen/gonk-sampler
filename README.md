@@ -59,6 +59,7 @@ Nord Drum 3P setup (Shift + MIDI, then the System/Pad menus; manual pp. 11–14)
 - Ch for Nord channels 1–6 = MIDI 1–6 (individual channels: per-channel CCs; never the same as GL)
 - nt = 60/62/64/65/67/68 for channels 1–6 (this unit: ch 6 = 68; factory is 69)
 - PC = r or sr (otherwise program changes are ignored)
+- CC = receive on (separate from PC; with it off the Nord ignores every CC)
 - Dy (dynamics curve) = dy.Li on every channel for capture (the offset curves flatten velocity layers)
 - Mono groups off, channel reverb/delay off
 Clips with per-channel CCs come as one MIDI track per channel: in Ableton set each track's output to the MIDI channel in its name.
