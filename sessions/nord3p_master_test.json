@@ -1,0 +1,28 @@
+{
+  "name": "Nord3P Master Test",
+  "midi_channel": 10,
+  "bpm": 80,
+  "bars_per_hit": 1,
+  "gap_bars": 1,
+  "lead_in_bars": 1,
+  "velocities": [100],
+  "round_robins": 4,
+  "passes": ["clean"],
+  "sounds": [
+    {"name": "T01 kick baseline",            "note": 60, "role": "kick", "slot": 60},
+    {"name": "T02 kick pitch big A-B",       "note": 60, "role": "kick", "slot": 61, "rr_cc": {"31": [40, 90, 40, 90]}},
+    {"name": "T03 kick pitch fine steps",    "note": 60, "role": "kick", "slot": 62, "rr_cc": {"31": [62, 64, 66, 68]}},
+    {"name": "T04 kick tone decay A-B",      "note": 60, "role": "kick", "slot": 63, "rr_cc": {"50": [5, 110, 5, 110]}},
+    {"name": "T05 kick click A-B",           "note": 60, "role": "kick", "slot": 64, "rr_cc": {"56": [0, 127, 0, 127]}},
+    {"name": "T06 kick bend A-B",            "note": 60, "role": "kick", "slot": 65, "rr_cc": {"54": [0, 127, 0, 127]}},
+    {"name": "T07 hat noise decay A-B",      "note": 67, "role": "hat",  "slot": 66, "rr_cc": {"21": [5, 120, 5, 120]}},
+    {"name": "T08 hat noise filter A-B",     "note": 67, "role": "hat",  "slot": 67, "rr_cc": {"14": [15, 110, 15, 110]}},
+    {"name": "T09 kick decay via global sel68", "note": 60, "role": "kick", "slot": 68,
+     "cc_mode": "global", "select_value": 68, "rr_cc": {"50": [5, 110, 5, 110]}},
+    {"name": "T10 kick decay via global sel0",  "note": 60, "role": "kick", "slot": 69,
+     "cc_mode": "global", "select_value": 0,  "rr_cc": {"50": [5, 110, 5, 110]}},
+    {"name": "T11 kick program 0",           "note": 60, "role": "kick", "slot": 70, "program": 0},
+    {"name": "T12 kick program 1",           "note": 60, "role": "kick", "slot": 71, "program": 1},
+    {"name": "T13 kick program 0 again",     "note": 60, "role": "kick", "slot": 72, "program": 0}
+  ]
+}

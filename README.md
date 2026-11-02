@@ -47,7 +47,8 @@ cuts it to just before the next one, trims the dead tail, and prints a QA report
 velocity layers that don't get louder, round robins that don't match). It refuses to build with missing hits unless `--force`.
 
 Pads follow the General MIDI drum map on the 16 pads of a 4×4 (kick 36, snare 38, clap 39, closed hat 42, open hat 46, crash 49, ride 51, toms 41–50); empty slots show dimmed, ready to fill from the next preset.
-Session specs can also drive the Nord mid-clip: `"programs"` repeats the pattern for each preset (Program Change), `"cc"` makes derived sounds (e.g. an open hat from the hat with longer decay), `"rr_cc"` nudges a parameter per round robin. Check new CC ideas with `sessions/nord3p_cc_test.json` first.
+Session specs can also drive the Nord mid-clip: `"programs"` repeats the pattern for each preset (Program Change), `"cc"` makes derived sounds (e.g. an open hat from the hat with longer decay), `"rr_cc"` nudges a parameter per round robin. Check what the Nord responds to with the master test (`sessions/nord3p_master_test.json`): A/B tests for pitch, decay, click, bend, hat noise decay/filter, both CC methods, and program change. Score it with `tests/analyze_master_test.py <capture dir>`.
+Every clip starts with one empty bar (DAWs can drop a note at 0:00); put clips at bar 1 and bounce from bar 1.
 
 What you get: one pad per sound, every pad with all velocity layers and round robins, a **GONK** menu that
 switches passes (loudness-matched, so it changes character, not volume), PITCH / TONE / CRUSH / SPACE / VELOCITY / LEVEL,

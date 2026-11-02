@@ -23,7 +23,9 @@
   {
    "name": "hat",
    "note": 67,
-   "role": "hat"
+   "role": "hat",
+   "slot": 42,
+   "slot_fixed": false
   }
  ],
  "sync": {
@@ -31,7 +33,7 @@
   "note": 67,
   "velocity": 127
  },
- "total_seconds": 90.0,
+ "total_seconds": 93.0,
  "hits": [
   {
    "index": 0,

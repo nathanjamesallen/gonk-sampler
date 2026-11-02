@@ -20,12 +20,16 @@
   {
    "name": "kick",
    "note": 60,
-   "role": "kick"
+   "role": "kick",
+   "slot": 36,
+   "slot_fixed": false
   },
   {
    "name": "hat",
    "note": 67,
-   "role": "hat"
+   "role": "hat",
+   "slot": 42,
+   "slot_fixed": false
   }
  ],
  "sync": {
@@ -33,7 +37,7 @@
   "note": 60,
   "velocity": 127
  },
- "total_seconds": 96.0,
+ "total_seconds": 99.0,
  "hits": [
   {
    "index": 0,

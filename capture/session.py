@@ -104,11 +104,16 @@ def build(spec):
         ch_n = s.get("nord_channel") or note_ch.get(s["note"])
         if need_sel and ch_n is None:
             raise SystemExit(f"{s['name']}: can't tell which Nord channel plays note {s['note']} — add \"nord_channel\"")
-        def send_cc(t0, pairs, gap):
-            """individual: CC on the Nord channel's own MIDI channel; global: CC70 select first."""
+        def send_cc(t0, pairs, gap, s=s, ch_n=ch_n):
+            """individual: CC on the Nord channel's own MIDI channel; global: CC70 select first.
+            A sound may override with "cc_mode" and "select_value" (for testing encodings)."""
             evs = []
-            if cc_mode == "global":
-                evs.append(("cc", t0, CHANNEL_SELECT_CC, sel_vals[ch_n - 1], ch)); t0 += gap
+            mode = s.get("cc_mode", cc_mode)
+            if mode == "global":
+                sv = s.get("select_value", sel_vals[ch_n - 1] if sel_vals else None)
+                if sv is None:
+                    raise SystemExit(f"{s['name']}: global cc_mode needs a select_value")
+                evs.append(("cc", t0, CHANNEL_SELECT_CC, int(sv), ch)); t0 += gap
                 mch = ch
             else:
                 mch = indiv[ch_n] - 1
@@ -134,6 +139,9 @@ def build(spec):
     bar += 2
     # One MIDI track per MIDI channel: DAWs (Ableton) send a whole track on ONE channel,
     # so notes/program changes (global ch) and each Nord channel's CCs get their own track.
+    lead = int(spec.get("lead_in_bars", 1)) * bar_ticks   # empty bar first: DAWs can drop a note at 0:00
+    events = [(e[0], e[1] + lead) + tuple(e[2:]) for e in events]
+    bar += int(spec.get("lead_in_bars", 1))
     mid = mido.MidiFile(type=1, ticks_per_beat=tpb)
     nlen = tpb // 8
     chans = [ch] + sorted({e[4] for e in events if e[4] != ch})
