@@ -7,7 +7,7 @@ Built around the Nord Drum 3P through the Gonkulator at GizmoTown.
 
 ## Quick start
 
-    pip3 install numpy scipy soundfile librosa scikit-learn pillow matplotlib mido
+    pip3 install numpy scipy soundfile librosa scikit-learn pillow matplotlib mido python-rtmidi
     python3 pipeline/gonk.py take.wav --name "Gonk Nord 3P Dual" --subtitle "Nord Drum 3P · dual Gonkulator"
 
 Outputs `<Name>.dslibrary` (drag onto Decent Sampler) and `<Name>_OneShots.zip`.
@@ -33,7 +33,7 @@ Three steps, any hardware:
 
 1. **Describe the session** — `sessions/<kit>.json`: sounds (name, MIDI note, role), velocities, round robins, spacing, passes.
    `python3 capture/session.py sessions/nord3p_kit1.json sessions/out` → `.mid` clip + `_map.json`.
-2. **Record** — set the DAW tempo it prints (80 BPM = 3 s per hit), play the clip from bar 1, once per drive setting.
+2. **Record** — play the clip with `python3 capture/play.py <clip>.mid --port "MIDI Express"` (sends every CC/program change exactly; Ableton's MIDI import can drop them) while the DAW records audio. Or set the DAW tempo it prints (80 BPM = 3 s per hit), play the clip from bar 1, once per drive setting.
    Turn the Gonkulator up between passes. Export each pass as `<Name>_<pass>.wav` (e.g. `Nord3P_Kit1_bonkers.wav`), same sample rate, starting at bar 1.
 3. **Build** — `python3 capture/run.py sessions/out/Nord3P_Kit1_map.json ~/Rec/Nord3P_Kit1_*.wav --name "Gonk Nord Kit 1"`
 
