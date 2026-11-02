@@ -51,6 +51,13 @@ Subtle round-robin variation (so RR hits really differ):
 sends value k before round robin k of every layer (here: tiny tone-pitch moves).
 Use absolute values near the preset's own setting.
 
+Preset-agnostic round-robin variation (same file works for any preset):
+    "rr_velocity_offsets": [-4, 0, 3, 6]
+plays round robin k at layer velocity + offset k (clamped 1-127). The Nord's
+velocity response shifts each hit slightly relative to whatever preset is
+loaded. The map keeps the nominal layer velocity, so capture/build file the hit
+under its layer; "played_velocity" records what was actually sent.
+
 Nord 3P CCs worth using: 21 noise decay, 50 tone decay, 31/63 tone pitch
 (MSB/LSB), 14 noise filter freq, 23 dist amount, 56 click level.
 """
@@ -133,15 +140,21 @@ def build(spec):
             evs = send_cc(t, sorted(s["cc"].items(), key=lambda kv: int(kv[0])), step)
             events += evs; t = evs[-1][1] + step
         rr_cc = s.get("rr_cc") or {}
+        rr_vo = s.get("rr_velocity_offsets", spec.get("rr_velocity_offsets")) or [0]
         for li, v in enumerate(vels):
             for k in range(rr):
                 if rr_cc:                      # beat 4 of the bar before this hit: tail is gone
                     events += send_cc(bar * bar_ticks - tpb,
                                       [(cc, vals[k % len(vals)]) for cc, vals in
                                        sorted(rr_cc.items(), key=lambda kv: int(kv[0]))], tpb // 16)
-                events.append(("note", bar * bar_ticks, s["note"], v, ch))
+                off = int(rr_vo[k % len(rr_vo)])
+                pv = v + off
+                if pv > 127 or pv < 1:          # mirror instead of clamping, so RR hits stay distinct
+                    pv = v - off
+                pv = max(1, min(127, pv))
+                events.append(("note", bar * bar_ticks, s["note"], pv, ch))
                 hits.append(dict(index=len(hits), sound=si, name=s["name"], role=s.get("role", "perc"),
-                                 note=s["note"], velocity=v, layer=li + 1, rr=k + 1,
+                                 note=s["note"], velocity=v, played_velocity=pv, layer=li + 1, rr=k + 1,
                                  seconds=round(bar * bar_s, 4), window=round(bph * bar_s, 4)))
                 bar += bph
         bar += gap

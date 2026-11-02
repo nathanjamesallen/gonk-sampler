@@ -1,0 +1,61 @@
+{
+ "name": "Nord3P Kit B",
+ "midi_channel": 10,
+ "bpm": 80,
+ "bars_per_hit": 1,
+ "gap_bars": 2,
+ "velocities": [
+  20,
+  45,
+  70,
+  95,
+  115,
+  127
+ ],
+ "round_robins": 4,
+ "passes": [
+  "clean",
+  "low",
+  "med",
+  "high",
+  "bonkers"
+ ],
+ "sounds": [
+  {
+   "name": "kick B",
+   "note": 60,
+   "role": "kick"
+  },
+  {
+   "name": "snare B",
+   "note": 62,
+   "role": "snare"
+  },
+  {
+   "name": "ping B",
+   "note": 64,
+   "role": "bell"
+  },
+  {
+   "name": "clap B",
+   "note": 65,
+   "role": "clap"
+  },
+  {
+   "name": "hat B",
+   "note": 67,
+   "role": "hat"
+  },
+  {
+   "name": "cymb B",
+   "note": 68,
+   "role": "cymbal"
+  }
+ ],
+ "rr_velocity_offsets": [
+  -3,
+  0,
+  2,
+  4
+ ]
+}
